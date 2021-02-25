@@ -1,1 +1,2 @@
 pygame
+loguru==0.4.1
