@@ -1,6 +1,7 @@
 import os
 import pygame
 from directed_attack import DirectedAttack
+from aoe_attack import AoeAttack
 
 WIDTH, HEIGHT = 512, 512 # TODO: get from screen/window class
 WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE = "WEST", "EAST", "NORTH", "SOUTH", "NW", "NE", "SW", "SE"
@@ -18,6 +19,9 @@ class Player(pygame.Rect):
 
         self.directed_attack = DirectedAttack(left, top)
         self.doing_directed_attack = False
+
+        self.aoe_attack = AoeAttack(left - 32, top - 32)
+        self.doing_aoe_attack = False
 
     def handle_movement(self, keys_pressed):
         if keys_pressed[pygame.K_a] and self.x - VEL > 0: # LEFT
@@ -90,3 +94,11 @@ class Player(pygame.Rect):
 
         else:
             self.doing_directed_attack = False
+
+    def resolve_aoe_attack(self, tick):
+        self.aoe_attack.determine_frame(tick)
+        if self.aoe_attack.frame:
+            self.aoe_attack.x = self.x - 32
+            self.aoe_attack.y = self.y - 32
+        else:
+            self.doing_aoe_attack = False

@@ -45,18 +45,21 @@ def draw_hideout():
 
 def draw_develop_level(player, virus):
     WIN.fill(WHITE)
+
+    WIN.blit(VIRUS_SPRITE, (virus.x, virus.y))
+
+    if player.doing_aoe_attack:
+        WIN.blit(player.aoe_attack.frame, (player.aoe_attack.x, player.aoe_attack.y))
+
     if player.facing_left:
         WIN.blit(player.sprite_l, (player.x, player.y))
     else:
         WIN.blit(player.sprite_r, (player.x, player.y))
     
-    WIN.blit(VIRUS_SPRITE, (virus.x, virus.y))
-    
     if player.doing_directed_attack:
         WIN.blit(player.directed_attack.frame, (player.directed_attack.x, player.directed_attack.y))
 
     pygame.display.update()
-
 
 def generate_random_direction():
     return DIRECTIONS[random.randint(0, 3)]
@@ -104,14 +107,19 @@ def main():
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_button = pygame.mouse.get_pressed()
-                    if mouse_button[0] and player.doing_directed_attack == False:
-                        mouse_pos = pygame.mouse.get_pos()
-                        direction = player.mouse_direction_relative_to_player(mouse_pos)
+                    if not player.doing_directed_attack and not player.doing_aoe_attack:
+                        if mouse_button[0] and player.doing_directed_attack == False:
+                            mouse_pos = pygame.mouse.get_pos()
+                            direction = player.mouse_direction_relative_to_player(mouse_pos)
+                            
+                            if direction:
+                                player.doing_directed_attack = True
+                                player.directed_attack.direction = direction
+                                player.directed_attack.starting_tick = tick
                         
-                        if direction:
-                            player.doing_directed_attack = True
-                            player.directed_attack.direction = direction
-                            player.directed_attack.starting_tick = tick - 1
+                        elif mouse_button[2] and player.doing_aoe_attack == False:
+                            player.doing_aoe_attack = True
+                            player.aoe_attack.starting_tick = tick
 
             
             keys_pressed = pygame.key.get_pressed()
@@ -124,10 +132,13 @@ def main():
 
             if player.doing_directed_attack:
                 player.resolve_directed_attack(tick)
+            elif player.doing_aoe_attack:
+                player.resolve_aoe_attack(tick)
             
             handle_virus_movement(virus_direction, virus)
 
             draw_develop_level(player, virus)
+
             if tick < 59:
                 tick += 1
             else:
