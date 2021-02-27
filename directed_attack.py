@@ -25,6 +25,7 @@ class DirectedAttack(Attack):
         self.starting_tick = None
         self.frame = None
         self.direction = None
+        self.hitbox = pygame.Rect(left, top, width, height)
 
     def set_frame(self, frame_index):
         self.frame = self.DIRECTED_ATTACK[frame_index]
@@ -63,3 +64,11 @@ class DirectedAttack(Attack):
 
     def rotate_frame(self, degrees):
         self.frame = pygame.transform.rotate(self.frame, degrees)
+
+    def update_location(self, x, y):
+        self.x = x
+        self.y = y
+
+    def update_hitbox(self, x, y):
+        self.hitbox.x = x
+        self.hitbox.y = y

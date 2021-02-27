@@ -16,6 +16,7 @@ class Player(pygame.Rect):
         self.facing_left = facing_left
         self.sprite_l = pygame.transform.scale(self.SPRITE_IMATE_L, (width, height))
         self.sprite_r = pygame.transform.scale(self.SPRITE_IMAGE_R, (width, height))
+        self.hitbox = pygame.Rect(left, top+6, width, height-11)
 
         self.directed_attack = DirectedAttack(left, top)
         self.doing_directed_attack = False
@@ -34,6 +35,11 @@ class Player(pygame.Rect):
             self.y -= VEL
         if keys_pressed[pygame.K_s] and self.y + self.height + VEL < HEIGHT: # DOWN
             self.y += VEL
+        self.update_hitbox()
+
+    def update_hitbox(self):
+        self.hitbox.x = self.x
+        self.hitbox.y = self.y + 6
 
     def mouse_direction_relative_to_player(self, mouse_pos):
         if mouse_pos[0] < self.x and mouse_pos[1] > self.y and mouse_pos[1] < self.y + self.height:
@@ -62,35 +68,35 @@ class Player(pygame.Rect):
         if self.directed_attack.frame:
             if self.directed_attack.direction == WEST:
                 self.directed_attack.rotate_frame(90)
-                self.directed_attack.x = self.x - self.directed_attack.width
-                self.directed_attack.y = self.y
+                self.directed_attack.update_location(self.x - self.directed_attack.width, self.y)
+                self.directed_attack.update_hitbox(self.directed_attack.x, self.directed_attack.y)
             elif self.directed_attack.direction == EAST:
                 self.directed_attack.rotate_frame(270)
-                self.directed_attack.x = self.x + self.width
-                self.directed_attack.y = self.y
+                self.directed_attack.update_location(self.x + self.width, self.y)
+                self.directed_attack.update_hitbox(self.directed_attack.x, self.directed_attack.y)
             elif self.directed_attack.direction == NORTH:
-                self.directed_attack.x = self.x
-                self.directed_attack.y = self.y - self.directed_attack.height
+                self.directed_attack.update_location(self.x, self.y - self.directed_attack.height + 5)
+                self.directed_attack.update_hitbox(self.directed_attack.x, self.directed_attack.y)
             elif self.directed_attack.direction == SOUTH:
                 self.directed_attack.rotate_frame(180)
-                self.directed_attack.x = self.x
-                self.directed_attack.y = self.y + self.height
+                self.directed_attack.update_location(self.x, self.y + self.height - 5)
+                self.directed_attack.update_hitbox(self.directed_attack.x, self.directed_attack.y)
             elif self.directed_attack.direction == NW:
                 self.directed_attack.rotate_frame(45)
-                self.directed_attack.x = self.x - self.directed_attack.width
-                self.directed_attack.y = self.y - self.directed_attack.height
+                self.directed_attack.update_location(self.x - self.directed_attack.width, self.y - self.directed_attack.height + 2)
+                self.directed_attack.update_hitbox(self.directed_attack.x + 10, self.directed_attack.y + 10)
             elif self.directed_attack.direction == NE:
                 self.directed_attack.rotate_frame(315)
-                self.directed_attack.x = self.x + self.width - 20 # manually changed to be visually closer to player
-                self.directed_attack.y = self.y - self.directed_attack.height
+                self.directed_attack.update_location(self.x + self.width - 22, self.y - self.directed_attack.height + 2)
+                self.directed_attack.update_hitbox(self.directed_attack.x + 15, self.directed_attack.y + 10)
             elif self.directed_attack.direction == SW:
                 self.directed_attack.rotate_frame(135)
-                self.directed_attack.x = self.x - self.directed_attack.width
-                self.directed_attack.y = self.y + self.height - 20
-            else:
+                self.directed_attack.update_location(self.x - self.directed_attack.width, self.y + self.height - 30)
+                self.directed_attack.update_hitbox(self.directed_attack.x + 12, self.directed_attack.y + 15)
+            else: # SE
                 self.directed_attack.rotate_frame(225)
-                self.directed_attack.x = self.x + self.width - 20
-                self.directed_attack.y = self.y + self.height - 20
+                self.directed_attack.update_location(self.x + self.width - 25, self.y + self.height - 30)
+                self.directed_attack.update_hitbox(self.directed_attack.x + 15, self.directed_attack.y + 15)
 
         else:
             self.doing_directed_attack = False
@@ -98,7 +104,6 @@ class Player(pygame.Rect):
     def resolve_aoe_attack(self, tick):
         self.aoe_attack.determine_frame(tick)
         if self.aoe_attack.frame:
-            self.aoe_attack.x = self.x - 32
-            self.aoe_attack.y = self.y - 32
+            self.aoe_attack.update_location(self.x - 32, self.y - 32)
         else:
             self.doing_aoe_attack = False

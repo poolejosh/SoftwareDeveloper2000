@@ -5,6 +5,7 @@ import random
 from loguru import logger
 
 from player import Player
+from virus_enemy import VirusEnemy
 
 LOGGER_FORMAT = "<green>{time}</green> <level>{message}</level>"
 
@@ -22,18 +23,12 @@ DEVELOP = "DEVELOP"
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-
-WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE = "WEST", "EAST", "NORTH", "SOUTH", "NW", "NE", "SW", "SE"
-DIRECTIONS = [WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE]
+BLUE = (0, 0, 255)
+MAGENTA = (255, 0, 255)
 
 FPS = 60
-VIRUS_VEL = 1
 
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
-VIRUS_SPRITE_WIDTH, VIRUS_SPRITE_HEIGHT = 48, 48
-
-VIRUS_SPRITE_IMAGE = pygame.image.load(os.path.join("images", "sprites", "virus_sprite.png"))
-VIRUS_SPRITE = pygame.transform.scale(VIRUS_SPRITE_IMAGE, (VIRUS_SPRITE_WIDTH, VIRUS_SPRITE_HEIGHT))
 
 def draw_main_menu():
     WIN.fill(RED)
@@ -46,38 +41,32 @@ def draw_hideout():
 def draw_develop_level(player, virus):
     WIN.fill(WHITE)
 
-    WIN.blit(VIRUS_SPRITE, (virus.x, virus.y))
+    WIN.blit(virus.sprite, (virus.x, virus.y))
+    pygame.draw.rect(WIN, MAGENTA, virus.hitbox, 1)
 
     if player.doing_aoe_attack:
         WIN.blit(player.aoe_attack.frame, (player.aoe_attack.x, player.aoe_attack.y))
+        pygame.draw.rect(WIN, BLUE, player.aoe_attack.hitbox, 1)
 
     if player.facing_left:
         WIN.blit(player.sprite_l, (player.x, player.y))
     else:
         WIN.blit(player.sprite_r, (player.x, player.y))
-    
+    pygame.draw.rect(WIN, RED, player.hitbox, 1)
+
     if player.doing_directed_attack:
         WIN.blit(player.directed_attack.frame, (player.directed_attack.x, player.directed_attack.y))
-
+        pygame.draw.rect(WIN, GREEN, player.directed_attack.hitbox, 1)
+        if player.directed_attack.hitbox.colliderect(virus.hitbox):
+            pass
+    
     pygame.display.update()
-
-def generate_random_direction():
-    return DIRECTIONS[random.randint(0, 3)]
-
-def handle_virus_movement(direction, virus):
-    if direction == WEST and virus.x - VIRUS_VEL > 0: # LEFT
-        virus.x -= VIRUS_VEL
-    if direction == EAST and virus.x + virus.width + VIRUS_VEL < WIDTH: # RIGHT
-        virus.x += VIRUS_VEL
-    if direction == NORTH and virus.y - VIRUS_VEL > 0: # UP
-        virus.y -= VIRUS_VEL
-    if direction == SOUTH and virus.y + virus.height + VIRUS_VEL < HEIGHT: # DOWN
-        virus.y += VIRUS_VEL
 
 def main():
     logger.debug("Game is Running!")
     player = Player(WIDTH/2 - PLAYER_WIDTH/2, HEIGHT/2 - PLAYER_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, False)
-    virus = pygame.Rect(400, 300, VIRUS_SPRITE_WIDTH, VIRUS_SPRITE_HEIGHT)
+    virus = VirusEnemy(400, 300)
+    # virus = pygame.Rect(400, 300, VIRUS_SPRITE_WIDTH, VIRUS_SPRITE_HEIGHT)
 
     clock = pygame.time.Clock()
     run = True
@@ -126,7 +115,7 @@ def main():
             player.handle_movement(keys_pressed)
             if (tick == 0 or tick == FPS/2):
                 if random.randint(0,1) == 0:
-                    virus_direction = generate_random_direction()
+                    virus_direction = virus.generate_random_direction()
                 else:
                     virus_direction = None
 
@@ -134,8 +123,8 @@ def main():
                 player.resolve_directed_attack(tick)
             elif player.doing_aoe_attack:
                 player.resolve_aoe_attack(tick)
-            
-            handle_virus_movement(virus_direction, virus)
+
+            virus.handle_movement(virus_direction)
 
             draw_develop_level(player, virus)
 

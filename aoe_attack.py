@@ -10,6 +10,7 @@ class AoeAttack(Attack):
         self.started = False
         self.starting_tick = None
         self.frame = None
+        self.hitbox = pygame.Rect(left+20, top+20, width-32, height-30)
 
     def set_frame(self, frame_index):
         frame_image = pygame.image.load(os.path.join("images", "fx", "aoe_attack", "{}.png".format(frame_index)))
@@ -24,3 +25,12 @@ class AoeAttack(Attack):
             self.started = False
         else:
             self.set_frame(tick)
+
+    def update_location(self, x, y):
+        self.x = x
+        self.y = y
+        self.update_hitbox()
+
+    def update_hitbox(self):
+        self.hitbox.x = self.x + 20
+        self.hitbox.y = self.y + 20
