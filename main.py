@@ -4,6 +4,7 @@ import sys
 import random
 from loguru import logger
 
+from main_menu import MainMenu
 from player import Player
 from virus_enemy import VirusEnemy
 
@@ -20,6 +21,7 @@ MAIN_MENU = "MAIN_MENU"
 HIDEOUT = "HIDEOUT"
 DEVELOP = "DEVELOP"
 
+BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -30,8 +32,12 @@ FPS = 60
 
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
 
-def draw_main_menu():
-    WIN.fill(RED)
+def draw_main_menu(main_menu):
+    WIN.blit(main_menu.background, (main_menu.x, main_menu.y))
+    for button in main_menu.buttons:
+        WIN.blit(button.display, (button.x, button.y))
+        label = button.font.render(button.label, False, BLACK)
+        WIN.blit(label, (button.x + 50, button.y + 40))
     pygame.display.update()
 
 def draw_hideout():
@@ -64,6 +70,7 @@ def draw_develop_level(player, virus):
 
 def main():
     logger.debug("Game is Running!")
+    main_menu = MainMenu(0, 0)
     player = Player(WIDTH/2 - PLAYER_WIDTH/2, HEIGHT/2 - PLAYER_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, False)
     virus = VirusEnemy(400, 300)
     # virus = pygame.Rect(400, 300, VIRUS_SPRITE_WIDTH, VIRUS_SPRITE_HEIGHT)
@@ -71,7 +78,7 @@ def main():
     clock = pygame.time.Clock()
     run = True
     tick = 0
-    mode = DEVELOP # current game mode
+    mode = MAIN_MENU # current game mode
 
     virus_direction = None
     while run:
@@ -81,7 +88,16 @@ def main():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-            draw_main_menu()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_button = pygame.mouse.get_pressed()
+                    if mouse_button[0]:
+                        mouse_pos = pygame.mouse.get_pos()
+                        if main_menu.buttons[0].mouse_on_button(mouse_pos):
+                            mode = DEVELOP # TODO: change to hideout eventually?
+
+
+            draw_main_menu(main_menu)
 
         elif mode == HIDEOUT:
             for event in pygame.event.get():
