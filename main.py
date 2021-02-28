@@ -32,6 +32,43 @@ FPS = 60
 
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
 
+BACKGROUND_IMAGES = [
+    pygame.image.load(os.path.join("images", "matrix_background", "0.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "1.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "2.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "3.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "4.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "5.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "6.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "7.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "8.png")),
+    pygame.image.load(os.path.join("images", "matrix_background", "9.png")),
+]
+
+def determine_develop_background(tick):
+    if tick < 6:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[0], (WIDTH, HEIGHT))
+    elif tick >= 6 and tick < 12:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[1], (WIDTH, HEIGHT))
+    elif tick >= 12 and tick < 18:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[2], (WIDTH, HEIGHT))
+    elif tick >= 18 and tick < 24:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[3], (WIDTH, HEIGHT))
+    elif tick >= 24 and tick < 30:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[4], (WIDTH, HEIGHT))
+    elif tick >= 30 and tick < 36:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[5], (WIDTH, HEIGHT))
+    elif tick >= 36 and tick < 42:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[6], (WIDTH, HEIGHT))
+    elif tick >= 42 and tick < 48:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[7], (WIDTH, HEIGHT))
+    elif tick >= 48 and tick < 54:
+        background = pygame.transform.scale(BACKGROUND_IMAGES[8], (WIDTH, HEIGHT))
+    else:
+       background = pygame.transform.scale(BACKGROUND_IMAGES[9], (WIDTH, HEIGHT))
+
+    return background
+
 def draw_main_menu(main_menu):
     WIN.blit(main_menu.background, (main_menu.x, main_menu.y))
     for button in main_menu.buttons:
@@ -44,8 +81,8 @@ def draw_hideout():
     WIN.fill(GREEN)
     pygame.display.update()
 
-def draw_develop_level(player, virus):
-    WIN.fill(WHITE)
+def draw_develop_level(player, virus, background):
+    WIN.blit(background, (0, 0))
 
     WIN.blit(virus.sprite, (virus.x, virus.y))
     pygame.draw.rect(WIN, MAGENTA, virus.hitbox, 1)
@@ -76,6 +113,11 @@ def main():
     # virus = pygame.Rect(400, 300, VIRUS_SPRITE_WIDTH, VIRUS_SPRITE_HEIGHT)
 
     clock = pygame.time.Clock()
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 4.wav"))
+    pygame.mixer.music.set_volume(0.01) # TODO: 0.1 when done
+    pygame.mixer.music.play(-1)
     run = True
     tick = 0
     mode = MAIN_MENU # current game mode
@@ -95,7 +137,8 @@ def main():
                         mouse_pos = pygame.mouse.get_pos()
                         if main_menu.buttons[0].mouse_on_button(mouse_pos):
                             mode = DEVELOP # TODO: change to hideout eventually?
-
+                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 1.wav"))
+                            pygame.mixer.music.play(-1)
 
             draw_main_menu(main_menu)
 
@@ -142,7 +185,9 @@ def main():
 
             virus.handle_movement(virus_direction)
 
-            draw_develop_level(player, virus)
+            background = determine_develop_background(tick)
+
+            draw_develop_level(player, virus, background)
 
             if tick < 59:
                 tick += 1
