@@ -5,7 +5,7 @@ from enemy import Enemy
 
 WIDTH, HEIGHT = 512, 512 # TODO: get from screen/window class
 WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE = "WEST", "EAST", "NORTH", "SOUTH", "NW", "NE", "SW", "SE"
-DIRECTIONS = [WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE]
+DIRECTIONS = [NW, NORTH, NE, EAST, SE, SOUTH, SW, WEST, NW, NORTH, NE, EAST, SE]
 VEL = 1
 
 class VirusEnemy(Enemy):
@@ -15,22 +15,75 @@ class VirusEnemy(Enemy):
     def __init__(self, left, top, width=VIRUS_WIDTH, height=VIRUS_HEIGHT):
         Enemy.__init__(self, left, top, width, height)
         self.sprite = pygame.transform.scale(self.VIRUS_SPRITE_IMAGE, (width, height))
+        self.direction = self.generate_random_direction()
 
         self.hitbox = pygame.Rect(left, top, width, height)
 
     @staticmethod
     def generate_random_direction():
-        return DIRECTIONS[random.randint(0, 3)]
+        return DIRECTIONS[random.randint(0, 7)]
 
-    def handle_movement(self, direction):
-        if direction == WEST and self.x - VEL > 0:
+    def touching_wall(self):
+        if self.x == 0:
+            wall = WEST
+        elif self.x == WIDTH:
+            wall = EAST
+        elif self.y == 0:
+            wall = NORTH
+        elif self.y == HEIGHT:
+            wall = SOUTH
+        else:
+            wall = None
+        
+        return wall
+
+    def change_direction(self):
+        wall = self.touching_wall()
+        if random.randint(0, 3) == 3:
+            self.direction = None
+        elif wall:
+            rand = rand.randint(0, 6)
+            if wall == NORTH:
+                rand += 2
+            elif wall == EAST:
+                rand += 4
+            elif wall == SOUTH:
+                rand += 6
+            
+            self.direction = DIRECTIONS[rand]
+        else:
+            rand = random.randint(0, 2)
+            if self.direction == None:
+                self.generate_random_direction()
+            elif self.direction == NE:
+                rand += 7
+            else:
+                rand += DIRECTIONS.index(self.direction) - 1
+            
+            self.direction = DIRECTIONS[rand]
+    
+    def handle_movement(self):
+        if self.direction == WEST and self.x - VEL > 0:
             self.x -= VEL
-        if direction == EAST and self.x + self.width + VEL < WIDTH:
+        if self.direction == EAST and self.x + self.width + VEL < WIDTH:
             self.x += VEL
-        if direction == NORTH and self.y - VEL > 0:
+        if self.direction == NORTH and self.y - VEL > 0:
             self.y -= VEL
-        if direction == SOUTH and self.y + self.height + VEL < HEIGHT:
+        if self.direction == SOUTH and self.y + self.height + VEL < HEIGHT:
             self.y += VEL
+        if self.direction == NW and self.y - VEL > 0 and self.x - VEL > 0:
+            self.x -= VEL
+            self.y -= VEL
+        if self.direction == NE and self.y - VEL > 0 and self.x + self.width + VEL < WIDTH:
+            self.x += VEL
+            self.y -= VEL
+        if self.direction == SW and self.y + self.height + VEL < HEIGHT and self.x - VEL > 0:
+            self.x -= VEL
+            self.y += VEL
+        if self.direction == SE and self.y + self.height + VEL < HEIGHT and self.x + self.width + VEL < WIDTH:
+            self.x += VEL
+            self.y += VEL
+
         
         self.update_hitbox()
     

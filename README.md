@@ -1,5 +1,5 @@
 # Assets Used
-- [Main Menu](https://comp3interactive.itch.io/retro-windows-gui)
+- [UI](https://comp3interactive.itch.io/retro-windows-gui)
 - [Develop Background](https://www.pinterest.com/pin/509188301610937530/)
 - [Music](https://tallbeard.itch.io/music-loop-bundle)
 - [Player Sprite](https://lh3.googleusercontent.com/proxy/kAKibZzh1ClUaLENHOr1t92wOKP6R84vS-wG-KBwscRLR8Ly-jUG2Q9waZJ1qLQMRQEuUr2_TCvVrz7d1Opo0fUx)

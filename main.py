@@ -71,6 +71,8 @@ def determine_develop_background(tick):
 
 def draw_main_menu(main_menu):
     WIN.blit(main_menu.background, (main_menu.x, main_menu.y))
+    WIN.blit(main_menu.header, (100, 10))
+    
     for button in main_menu.buttons:
         WIN.blit(button.display, (button.x, button.y))
         label = button.font.render(button.label, False, BLACK)
@@ -110,7 +112,6 @@ def main():
     main_menu = MainMenu(0, 0)
     player = Player(WIDTH/2 - PLAYER_WIDTH/2, HEIGHT/2 - PLAYER_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, False)
     virus = VirusEnemy(400, 300)
-    # virus = pygame.Rect(400, 300, VIRUS_SPRITE_WIDTH, VIRUS_SPRITE_HEIGHT)
 
     clock = pygame.time.Clock()
     pygame.init()
@@ -121,8 +122,6 @@ def main():
     run = True
     tick = 0
     mode = MAIN_MENU # current game mode
-
-    virus_direction = None
     while run:
         clock.tick(FPS) # limit game loop to 60 FPS 
 
@@ -172,18 +171,15 @@ def main():
             
             keys_pressed = pygame.key.get_pressed()
             player.handle_movement(keys_pressed)
-            if (tick == 0 or tick == FPS/2):
-                if random.randint(0,1) == 0:
-                    virus_direction = virus.generate_random_direction()
-                else:
-                    virus_direction = None
+            if (tick == 0):
+                virus.change_direction()
 
             if player.doing_directed_attack:
                 player.resolve_directed_attack(tick)
             elif player.doing_aoe_attack:
                 player.resolve_aoe_attack(tick)
 
-            virus.handle_movement(virus_direction)
+            virus.handle_movement()
 
             background = determine_develop_background(tick)
 
