@@ -1,6 +1,6 @@
 import os
 import pygame
-from button import Button
+from main_menu_button import MainMenuButton
 
 WHITE = (255, 255, 255)
 
@@ -14,6 +14,6 @@ class MainMenu(pygame.Rect):
         self.header_font = pygame.font.Font(os.path.join("fonts", "M_8pt.ttf"), 20)
         self.header = self.header_font.render("Software Developer 2000", False, WHITE)
         self.buttons = [
-            Button(81, 100, font_size=40, label="Start Game")
+            MainMenuButton(81, 100, font_size=40, label="Start Game")
         ]
 

@@ -1,15 +1,8 @@
-import os
 import pygame
 
-pygame.font.init()
-
 class Button(pygame.Rect):
-    WIDTH, HEIGHT = 350, 150
-    IMAGE = pygame.image.load(os.path.join("images", "ui", "main_menu_button.png"))
-
-    def __init__(self, left, top, font_size, label, width=WIDTH, height=HEIGHT):
+    def __init__(self, left, top, font_size, label, width, height):
         pygame.Rect.__init__(self, left, top, width, height)
-        self.display = pygame.transform.scale(self.IMAGE, (width, height))
         self.font = pygame.font.Font(os.path.join("fonts", "M_8pt.ttf"), font_size)
         self.label = label
 
@@ -19,4 +12,3 @@ class Button(pygame.Rect):
             return True
         else:
             return False
-

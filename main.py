@@ -5,6 +5,8 @@ import random
 from loguru import logger
 
 from main_menu import MainMenu
+from hideout import Hideout
+from develop import Develop
 from player import Player
 from virus_enemy import VirusEnemy
 
@@ -32,43 +34,6 @@ FPS = 60
 
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
 
-BACKGROUND_IMAGES = [
-    pygame.image.load(os.path.join("images", "matrix_background", "0.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "1.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "2.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "3.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "4.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "5.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "6.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "7.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "8.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "9.png")),
-]
-
-def determine_develop_background(tick):
-    if tick < 6:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[0], (WIDTH, HEIGHT))
-    elif tick >= 6 and tick < 12:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[1], (WIDTH, HEIGHT))
-    elif tick >= 12 and tick < 18:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[2], (WIDTH, HEIGHT))
-    elif tick >= 18 and tick < 24:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[3], (WIDTH, HEIGHT))
-    elif tick >= 24 and tick < 30:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[4], (WIDTH, HEIGHT))
-    elif tick >= 30 and tick < 36:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[5], (WIDTH, HEIGHT))
-    elif tick >= 36 and tick < 42:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[6], (WIDTH, HEIGHT))
-    elif tick >= 42 and tick < 48:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[7], (WIDTH, HEIGHT))
-    elif tick >= 48 and tick < 54:
-        background = pygame.transform.scale(BACKGROUND_IMAGES[8], (WIDTH, HEIGHT))
-    else:
-       background = pygame.transform.scale(BACKGROUND_IMAGES[9], (WIDTH, HEIGHT))
-
-    return background
-
 def draw_main_menu(main_menu):
     WIN.blit(main_menu.background, (main_menu.x, main_menu.y))
     WIN.blit(main_menu.header, (100, 10))
@@ -79,12 +44,32 @@ def draw_main_menu(main_menu):
         WIN.blit(label, (button.x + 50, button.y + 40))
     pygame.display.update()
 
-def draw_hideout():
-    WIN.fill(GREEN)
+def draw_hideout(hideout):
+    WIN.blit(hideout.background, (hideout.x, hideout.y))
+    WIN.blit(hideout.header, (210, 10))
+
+    user_title = hideout.progress_font.render("Users:", False, BLACK)
+    WIN.blit(user_title, (53, 60))
+    WIN.blit(hideout.progress_bar, (53, 85))
+    users_progress = pygame.transform.scale(hideout.PROGRESS_FILL_IMAGE, (hideout.users * 4, 24))
+    WIN.blit(users_progress, (56, 88))
+
+    user_title = hideout.progress_font.render("Reputation:", False, BLACK)
+    WIN.blit(user_title, (53, 125))
+    WIN.blit(hideout.progress_bar, (53, 150))
+    rep_progress = pygame.transform.scale(hideout.PROGRESS_FILL_IMAGE, (hideout.reputation * 4, 24))
+    WIN.blit(rep_progress, (56, 153))
+
+    for button in hideout.buttons:
+        WIN.blit(button.display, (button.x, button.y))
+        label = button.font.render(button.label, False, BLACK)
+        WIN.blit(label, (button.x + 25, button.y + 20))
     pygame.display.update()
 
-def draw_develop_level(player, virus, background):
-    WIN.blit(background, (0, 0))
+    pygame.display.update()
+
+def draw_develop_level(player, virus, develop):
+    WIN.blit(develop.background, (0, 0))
 
     WIN.blit(virus.sprite, (virus.x, virus.y))
     pygame.draw.rect(WIN, MAGENTA, virus.hitbox, 1)
@@ -110,6 +95,8 @@ def draw_develop_level(player, virus, background):
 def main():
     logger.debug("Game is Running!")
     main_menu = MainMenu(0, 0)
+    hideout = Hideout(0, 0)
+    develop = Develop(0, 0)
     player = Player(WIDTH/2 - PLAYER_WIDTH/2, HEIGHT/2 - PLAYER_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, False)
     virus = VirusEnemy(400, 300)
 
@@ -135,8 +122,8 @@ def main():
                     if mouse_button[0]:
                         mouse_pos = pygame.mouse.get_pos()
                         if main_menu.buttons[0].mouse_on_button(mouse_pos):
-                            mode = DEVELOP # TODO: change to hideout eventually?
-                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 1.wav"))
+                            mode = HIDEOUT
+                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 3.wav"))
                             pygame.mixer.music.play(-1)
 
             draw_main_menu(main_menu)
@@ -145,7 +132,17 @@ def main():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-            draw_hideout()
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_button = pygame.mouse.get_pressed()
+                    if mouse_button[0]:
+                        mouse_pos = pygame.mouse.get_pos()
+                        if hideout.buttons[0].mouse_on_button(mouse_pos):
+                            mode = DEVELOP
+                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 1.wav"))
+                            pygame.mixer.music.play(-1)
+                    
+            draw_hideout(hideout)
 
         elif mode == DEVELOP:
             for event in pygame.event.get():
@@ -181,9 +178,9 @@ def main():
 
             virus.handle_movement()
 
-            background = determine_develop_background(tick)
+            develop.set_background(tick)
 
-            draw_develop_level(player, virus, background)
+            draw_develop_level(player, virus, develop)
 
             if tick < 59:
                 tick += 1
