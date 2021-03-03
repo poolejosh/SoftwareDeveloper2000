@@ -3,9 +3,11 @@ import random
 import pygame
 from enemy import Enemy
 
+from common import logger
+
 WIDTH, HEIGHT = 512, 512 # TODO: get from screen/window class
 WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE = "WEST", "EAST", "NORTH", "SOUTH", "NW", "NE", "SW", "SE"
-DIRECTIONS = [NW, NORTH, NE, EAST, SE, SOUTH, SW, WEST, NW, NORTH, NE, EAST, SE]
+DIRECTIONS = [NW, NORTH, NE, EAST, SE, SOUTH, SW, WEST, NW, NORTH, NE, EAST]
 VEL = 1
 
 class VirusEnemy(Enemy):
@@ -24,13 +26,13 @@ class VirusEnemy(Enemy):
         return DIRECTIONS[random.randint(0, 7)]
 
     def touching_wall(self):
-        if self.x == 0:
+        if self.x <= VEL:
             wall = WEST
-        elif self.x == WIDTH:
+        elif WIDTH - (self.x + self.width) <= VEL:
             wall = EAST
-        elif self.y == 0:
+        elif self.y <= VEL:
             wall = NORTH
-        elif self.y == HEIGHT:
+        elif HEIGHT - (self.y + self.height) <= VEL:
             wall = SOUTH
         else:
             wall = None
@@ -42,7 +44,7 @@ class VirusEnemy(Enemy):
         if random.randint(0, 3) == 3:
             self.direction = None
         elif wall:
-            rand = rand.randint(0, 6)
+            rand = random.randint(1, 5)
             if wall == NORTH:
                 rand += 2
             elif wall == EAST:

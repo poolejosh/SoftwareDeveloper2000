@@ -1,19 +1,15 @@
 import pygame
 import os
-import sys
 import random
-from loguru import logger
+from common import logger
+from text_wrap import drawText
 
 from main_menu import MainMenu
 from hideout import Hideout
 from develop import Develop
+from popup import PopUp
 from player import Player
 from virus_enemy import VirusEnemy
-
-LOGGER_FORMAT = "<green>{time}</green> <level>{message}</level>"
-
-logger.remove()
-logger.add(sys.stdout, colorize=True, format=LOGGER_FORMAT)
 
 WIDTH, HEIGHT = 512, 512
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -34,19 +30,38 @@ FPS = 60
 
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 64
 
-def draw_main_menu(main_menu):
-    WIN.blit(main_menu.background, (main_menu.x, main_menu.y))
-    WIN.blit(main_menu.header, (100, 10))
+def draw_main_menu(main_menu, popup):
+    WIN.blit(main_menu.background, main_menu)
+    header_rect = main_menu.header.get_rect()
+    header_rect.centerx = main_menu.centerx
+    header_rect.y = 12
+    WIN.blit(main_menu.header, header_rect)
     
     for button in main_menu.buttons:
-        WIN.blit(button.display, (button.x, button.y))
-        label = button.font.render(button.label, False, BLACK)
-        WIN.blit(label, (button.x + 50, button.y + 40))
+        WIN.blit(button.display, button)
+        label_rect = button.label.get_rect()
+        label_rect.center = button.center
+        WIN.blit(button.label, label_rect)
+
+    if popup:
+        WIN.blit(popup.background, popup)
+        header_rect = popup.header.get_rect()
+        header_rect.centerx = popup.centerx
+        header_rect.y = popup.y + 12
+        WIN.blit(popup.header, header_rect)
+        WIN.blit(popup.close_button.display, popup.close_button)
+        close_button_label_rect = popup.close_button.label.get_rect()
+        close_button_label_rect.center = popup.close_button.center
+        WIN.blit(popup.close_button.label, close_button_label_rect)
+        drawText(WIN, popup.body_text, BLACK, popup.body_rect, popup.body_font)
     pygame.display.update()
 
 def draw_hideout(hideout):
-    WIN.blit(hideout.background, (hideout.x, hideout.y))
-    WIN.blit(hideout.header, (210, 10))
+    WIN.blit(hideout.background, hideout)
+    header_rect = hideout.header.get_rect()
+    header_rect.centerx = hideout.centerx
+    header_rect.y = 12
+    WIN.blit(hideout.header, header_rect)
 
     user_title = hideout.progress_font.render("Users:", False, BLACK)
     WIN.blit(user_title, (53, 60))
@@ -61,9 +76,10 @@ def draw_hideout(hideout):
     WIN.blit(rep_progress, (56, 153))
 
     for button in hideout.buttons:
-        WIN.blit(button.display, (button.x, button.y))
-        label = button.font.render(button.label, False, BLACK)
-        WIN.blit(label, (button.x + 25, button.y + 20))
+        WIN.blit(button.display, button)
+        label_rect = button.label.get_rect()
+        label_rect.center = button.center
+        WIN.blit(button.label, label_rect)
     pygame.display.update()
 
     pygame.display.update()
@@ -97,6 +113,7 @@ def main():
     main_menu = MainMenu(0, 0)
     hideout = Hideout(0, 0)
     develop = Develop(0, 0)
+    popup = None
     player = Player(WIDTH/2 - PLAYER_WIDTH/2, HEIGHT/2 - PLAYER_HEIGHT/2, PLAYER_WIDTH, PLAYER_HEIGHT, False)
     virus = VirusEnemy(400, 300)
 
@@ -121,12 +138,18 @@ def main():
                     mouse_button = pygame.mouse.get_pressed()
                     if mouse_button[0]:
                         mouse_pos = pygame.mouse.get_pos()
-                        if main_menu.buttons[0].mouse_on_button(mouse_pos):
+                        if main_menu.buttons[0].mouse_on_button(mouse_pos) and not popup:
                             mode = HIDEOUT
                             pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 3.wav"))
                             pygame.mixer.music.play(-1)
 
-            draw_main_menu(main_menu)
+                        elif main_menu.buttons[1].mouse_on_button(mouse_pos) and not popup:
+                            popup = PopUp(64, 64, "How To Play", "how_to_play.txt")
+                        
+                        elif popup and popup.close_button.mouse_on_button(mouse_pos):
+                            popup = None
+
+            draw_main_menu(main_menu, popup)
 
         elif mode == HIDEOUT:
             for event in pygame.event.get():

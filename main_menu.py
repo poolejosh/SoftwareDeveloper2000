@@ -14,6 +14,7 @@ class MainMenu(pygame.Rect):
         self.header_font = pygame.font.Font(os.path.join("fonts", "M_8pt.ttf"), 20)
         self.header = self.header_font.render("Software Developer 2000", False, WHITE)
         self.buttons = [
-            MainMenuButton(81, 100, font_size=40, label="Start Game")
+            MainMenuButton(81, 100, label="Start Game"),
+            MainMenuButton(81, 300, label="How To Play")
         ]
 

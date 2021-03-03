@@ -1,4 +1,5 @@
 # Assets Used
+
 - [UI](https://comp3interactive.itch.io/retro-windows-gui)
 - [Develop Background](https://www.pinterest.com/pin/509188301610937530/)
 - [Music](https://tallbeard.itch.io/music-loop-bundle)
@@ -8,4 +9,3 @@
     - https://codemanu.itch.io/pixelart-effect-pack
     - https://kvsr.itch.io/fx062
 - [Pixelation Tool](https://pixel-me.tokyo/en/)
-

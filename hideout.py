@@ -18,7 +18,7 @@ class Hideout(pygame.Rect):
         self.progress_font = pygame.font.Font(os.path.join("fonts", "M_8pt.ttf"), 14)
         self.progress_bar = pygame.transform.scale(self.PROGRESS_BAR_IMAGE, (406, 30))
         self.buttons = [
-            HideoutButton(50, 200, font_size=30, label="Develop")
+            HideoutButton(50, 200, label="Develop")
         ]
 
         self.users = 0
@@ -28,7 +28,7 @@ class Hideout(pygame.Rect):
         self.rep_rate = 0
         self.dollars = 0
         self.features = []
-        self.debuffs = []
+        self.exploits = []
 
     def update_users(self):
         self.users += self.user_rate
