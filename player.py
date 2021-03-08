@@ -3,6 +3,8 @@ import pygame
 from directed_attack import DirectedAttack
 from aoe_attack import AoeAttack
 
+pygame.mixer.init()
+
 WIDTH, HEIGHT = 512, 512 # TODO: get from screen/window class
 WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE = "WEST", "EAST", "NORTH", "SOUTH", "NW", "NE", "SW", "SE"
 VEL = 3
@@ -17,12 +19,21 @@ class Player(pygame.Rect):
         self.sprite_l = pygame.transform.scale(self.SPRITE_IMATE_L, (width, height))
         self.sprite_r = pygame.transform.scale(self.SPRITE_IMAGE_R, (width, height))
         self.hitbox = pygame.Rect(left, top+6, width, height-11)
+        self.health = 20
+        self.invincible = False
+        self.i_frame = None
+        self.damaged_sound =  pygame.mixer.Sound(os.path.join("sounds", "Hero_Hurt.wav"))
+        self.damaged_sound.set_volume(0.03)
 
         self.directed_attack = DirectedAttack(left, top)
         self.doing_directed_attack = False
+        self.directed_attack_sound = pygame.mixer.Sound(os.path.join("sounds", "Laser.wav"))
+        self.directed_attack_sound.set_volume(0.1)
 
         self.aoe_attack = AoeAttack(left - 32, top - 32)
         self.doing_aoe_attack = False
+        self.aoe_attack_sound = pygame.mixer.Sound(os.path.join("sounds", "Magic.wav"))
+        self.aoe_attack_sound.set_volume(0.03)
 
     def handle_movement(self, keys_pressed):
         if keys_pressed[pygame.K_a] and self.x - VEL > 0: # LEFT
@@ -107,3 +118,18 @@ class Player(pygame.Rect):
             self.aoe_attack.update_location(self.x - 32, self.y - 32)
         else:
             self.doing_aoe_attack = False
+
+    def update_invincibility(self, tick):
+        if self.i_frame == tick:
+            self.invincible = False
+            self.i_frame = None
+
+    def inflict_damage(self, damage, tick):
+        self.health -= damage
+        self.invincible = True
+        self.i_frame = tick
+        if self.health <= 0:
+            return False
+        else:
+            return True
+    

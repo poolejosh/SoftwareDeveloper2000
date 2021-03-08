@@ -21,5 +21,4 @@ class PopUp(pygame.Rect):
         
         self.body_rect = pygame.Rect(self.x + 15, self.y + 60, self.width - 20, self.height - 70)
 
-
         self.close_button = CloseButton(self.x + self.width - 42, self.y + 15)

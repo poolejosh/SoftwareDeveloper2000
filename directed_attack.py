@@ -26,6 +26,7 @@ class DirectedAttack(Attack):
         self.frame = None
         self.direction = None
         self.hitbox = pygame.Rect(left, top, width, height)
+        self.damage = 5
 
     def set_frame(self, frame_index):
         self.frame = self.DIRECTED_ATTACK[frame_index]

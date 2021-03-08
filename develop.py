@@ -15,11 +15,14 @@ class Develop(pygame.Rect):
     pygame.image.load(os.path.join("images", "matrix_background", "8.png")),
     pygame.image.load(os.path.join("images", "matrix_background", "9.png")),
     ]
+    HEALTH_BAR_IMAGE = pygame.image.load(os.path.join("images", "ui", "health_bar.png"))
+    HEALTH_FILL_IMAGE = pygame.image.load(os.path.join("images", "ui", "health_fill.png"))
 
 
     def __init__(self, left, top, width=WIDTH, height=HEIGHT):
         pygame.Rect.__init__(self, left, top, width, height)
         self.background = pygame.transform.scale(self.BACKGROUND_IMAGES[0], (width, height))
+        self.health_bar = pygame.transform.scale(self.HEALTH_BAR_IMAGE, (406, 20))
 
     def set_background(self, tick):
         if tick < 6:

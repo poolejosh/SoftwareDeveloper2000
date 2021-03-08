@@ -8,4 +8,5 @@
 - FX:
     - https://codemanu.itch.io/pixelart-effect-pack
     - https://kvsr.itch.io/fx062
+    - https://soundsbydane.itch.io/8-bit-sound-pack
 - [Pixelation Tool](https://pixel-me.tokyo/en/)

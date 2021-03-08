@@ -11,6 +11,7 @@ class AoeAttack(Attack):
         self.starting_tick = None
         self.frame = None
         self.hitbox = pygame.Rect(left+20, top+20, width-32, height-30)
+        self.damage = 2
 
     def set_frame(self, frame_index):
         frame_image = pygame.image.load(os.path.join("images", "fx", "aoe_attack", "{}.png".format(frame_index)))

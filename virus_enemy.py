@@ -3,7 +3,7 @@ import random
 import pygame
 from enemy import Enemy
 
-from common import logger
+pygame.mixer.init()
 
 WIDTH, HEIGHT = 512, 512 # TODO: get from screen/window class
 WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE = "WEST", "EAST", "NORTH", "SOUTH", "NW", "NE", "SW", "SE"
@@ -20,6 +20,12 @@ class VirusEnemy(Enemy):
         self.direction = self.generate_random_direction()
 
         self.hitbox = pygame.Rect(left, top, width, height)
+        self.health = 10
+        self.damage = 5
+        self.damaged_sound =  pygame.mixer.Sound(os.path.join("sounds", "Enemy_Damage.wav"))
+        self.damaged_sound.set_volume(0.1)
+        self.i_frame = None
+        self.invincible = False
 
     @staticmethod
     def generate_random_direction():
@@ -92,3 +98,40 @@ class VirusEnemy(Enemy):
     def update_hitbox(self):
         self.hitbox.x = self.x
         self.hitbox.y = self.y
+
+    def inflict_damage(self, damage, tick):
+        self.health -= damage
+        self.invincible = True
+        self.i_frame = tick
+        if self.health <= 0:
+            return False
+        else:
+            return True
+
+    def update_invincibility(self, tick):
+        if self.i_frame == tick:
+            self.invincible = False
+            self.i_frame = None
+
+    def direction_away_from_player(self, player):
+        if self.x < player.x:
+            if self.y < player.y:
+                direction = NW
+            elif self.y > player.y:
+                direction = SW
+            else:
+                direction = WEST
+        elif self.x > player.x:
+            if self.y < player.y:
+                direction = NE
+            elif self.y > player.y:
+                direction = SE
+            else:
+                direction = EAST
+        else:
+            if self.y < player.y:
+                direction = NORTH
+            else:
+                direction = SOUTH
+        
+        return direction
