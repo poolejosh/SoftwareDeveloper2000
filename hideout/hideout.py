@@ -42,7 +42,7 @@ class Hideout(pygame.Rect):
         self.available_features = [
             (Feature("Domain Name", 0, 1, 1),  [Exploit("Malicious Misspellings", -1, 0), Exploit("DDOS", -1, -1)]),
             (Feature("Web Page", 10, 2, 2), [Exploit("XSS", 0, -1)]),
-            (Feature("Database", 20, 1, 1), [Exploit("SQL Injection", 0, -2)])
+            (Feature("Database", 20, 1, 2), [Exploit("SQL Injection", 0, -2)])
         ]
         self.next_feature = self.available_features[0]
         self.available_exploits = []
