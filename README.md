@@ -1,6 +1,6 @@
 # Web Developer 2000
 
-My second attempt at a roguelike game, this time with a subject focused on software development and vulnerabilities. More content and gameplay can still be added, but it is finished for now in its current state. This was made as a project for my Security and Vulnerabiltiy Assessments class.
+My second attempt at a roguelike game, this time with a subject focused on software development and vulnerabilities. More content and gameplay can still be added, but it is finished for now in its current state. This was made as a midterm project for my Security and Vulnerabiltiy Assessments class.
 
 ## About Me
 
