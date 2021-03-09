@@ -8,7 +8,7 @@ from main_menu import MainMenu
 from hideout import Hideout
 from develop import Develop
 from popup import PopUp
-from hideout_popup import HideoutPopUp
+from feature_popup import FeaturePopUp
 from player import Player
 from virus_enemy import VirusEnemy
 
@@ -99,12 +99,15 @@ def draw_hideout(hideout, popup):
         close_button_label_rect = popup.close_button.label.get_rect()
         close_button_label_rect.center = popup.close_button.center
         WIN.blit(popup.close_button.label, close_button_label_rect)
-        drawText(WIN, popup.feature_name_label, BLACK, popup.feature_name_label_rect, popup.body_font)
-        drawText(WIN, popup.feature_cost_label, BLACK, popup.feature_cost_label_rect, popup.body_font)
-        WIN.blit(popup.install_button.display, popup.install_button)
-        install_button_label_rect = popup.install_button.label.get_rect()
-        install_button_label_rect.center = popup.install_button.center
-        WIN.blit(popup.install_button.label, install_button_label_rect)
+        drawText(WIN, popup.body_text, BLACK, popup.body_rect, popup.body_font)
+
+        if isinstance(popup, FeaturePopUp):
+            drawText(WIN, popup.feature_name_label, BLACK, popup.feature_name_label_rect, popup.body_font)
+            drawText(WIN, popup.feature_cost_label, BLACK, popup.feature_cost_label_rect, popup.body_font)
+            WIN.blit(popup.install_button.display, popup.install_button)
+            install_button_label_rect = popup.install_button.label.get_rect()
+            install_button_label_rect.center = popup.install_button.center
+            WIN.blit(popup.install_button.label, install_button_label_rect)
 
     pygame.display.update()
 
@@ -113,21 +116,22 @@ def draw_develop_level(player, enemies, develop):
 
     for enemy in enemies:
         WIN.blit(enemy.sprite, enemy)
-        pygame.draw.rect(WIN, MAGENTA, enemy.hitbox, 1)
+        # pygame.draw.rect(WIN, MAGENTA, enemy.hitbox, 1) # draw enemy hitbox
 
     if player.doing_aoe_attack:
         WIN.blit(player.aoe_attack.frame, (player.aoe_attack.x, player.aoe_attack.y))
-        pygame.draw.rect(WIN, BLUE, player.aoe_attack.hitbox, 1)
+        # pygame.draw.rect(WIN, BLUE, player.aoe_attack.hitbox, 1) # draw aoe attack hitbox
 
     if player.facing_left:
         WIN.blit(player.sprite_l, (player.x, player.y))
     else:
         WIN.blit(player.sprite_r, (player.x, player.y))
-    pygame.draw.rect(WIN, RED, player.hitbox, 1)
+
+    # pygame.draw.rect(WIN, RED, player.hitbox, 1) # draw player hitbox
 
     if player.doing_directed_attack:
         WIN.blit(player.directed_attack.frame, (player.directed_attack.x, player.directed_attack.y))
-        pygame.draw.rect(WIN, GREEN, player.directed_attack.hitbox, 1)
+        # pygame.draw.rect(WIN, GREEN, player.directed_attack.hitbox, 1) # draw directed attack hitbox
 
     WIN.blit(develop.health_bar, (5, 485))
     player_health = pygame.transform.scale(develop.HEALTH_FILL_IMAGE, (player.health * 20, 14))
@@ -207,17 +211,22 @@ def main():
 
                         elif hideout.buttons[1].mouse_on_button(mouse_pos) and not popup:
                             if hideout.next_feature:
-                                popup = HideoutPopUp(64, 64, "Next Feature", "next_feature.txt", hideout.next_feature[0])
+                                popup = FeaturePopUp(64, 64, "Next Feature", "next_feature.txt", hideout.next_feature[0])
 
                         elif hideout.buttons[2].mouse_on_button(mouse_pos) and not popup:
                             mode = MAIN_MENU
                             pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 4.wav"))
                             pygame.mixer.music.play(-1)
 
+                        elif hideout.buttons[3].mouse_on_button(mouse_pos) and not popup:
+                            popup = PopUp(64, 64, "Active Exploits", "exploits.txt")
+                            for exploit in hideout.active_exploits:
+                                popup.body_text += exploit.name + "- user rate: {}, rep rate: {}".format(exploit.user_rate, exploit.rep_rate) +  ", "
+
                         elif popup:
                             if popup.close_button.mouse_on_button(mouse_pos):
                                 popup = None
-                            elif popup.install_button.mouse_on_button(mouse_pos):
+                            elif isinstance(popup, FeaturePopUp) and popup.install_button.mouse_on_button(mouse_pos):
                                 if hideout.install_next_feature():
                                     popup = None
 
@@ -304,7 +313,6 @@ def main():
 
             if len(enemies) == 0:
                 if random.randint(0,4) == 0:
-                    logger.debug("activate exploit")
                     num_exploits = len(hideout.available_exploits)
                     if num_exploits > 0:
                         exploit = hideout.available_exploits[random.randint(0,num_exploits-1)]
@@ -313,7 +321,6 @@ def main():
                         hideout.change_money(5)
                 
                 else:
-                    logger.debug("gain money")
                     hideout.change_money(5)
 
                 mode = HIDEOUT
@@ -321,6 +328,13 @@ def main():
                 pygame.mixer.music.play(-1)
                 hideout.users += hideout.user_rate
                 hideout.reputation += hideout.rep_rate
+                if hideout.users > 100:
+                    hideout.users = 100
+                if hideout.reputation > 100:
+                    hideout.reputation = 100
+                
+                if hideout.users == 100 and hideout.reputation == 100:
+                    popup = PopUp(64, 64, "You Win!", "win.txt")
     
     pygame.quit()
 

@@ -28,7 +28,8 @@ class Hideout(pygame.Rect):
         self.buttons = [
             HideoutButton(50, 250, label="Develop"),
             HideoutButton(260, 250, label="Next Feature"),
-            HideoutButton(50, 350, label="Main Menu")
+            HideoutButton(50, 350, label="Main Menu"),
+            HideoutButton(260, 350, label="Exploits")
         ]
 
         self.users = 0
@@ -46,12 +47,6 @@ class Hideout(pygame.Rect):
         self.next_feature = self.available_features[0]
         self.available_exploits = []
         self.active_exploits = []
-
-    def update_users(self):
-        self.users += self.user_rate
-    
-    def update_reputation(self):
-        self.reputation += self.rep_rate
 
     def install_next_feature(self):
         if self.next_feature and self.next_feature[0].cost <= self.dollars:

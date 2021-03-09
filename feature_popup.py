@@ -4,7 +4,7 @@ from hideout_button import HideoutButton
 
 BLACK = (0, 0, 0)
 
-class HideoutPopUp(PopUp):
+class FeaturePopUp(PopUp):
     def __init__(self, left, top, header_text, body_file, next_feature):
         PopUp.__init__(self, left, top, header_text, body_file)
         self.body_text.format(next_feature.name, next_feature.cost)
