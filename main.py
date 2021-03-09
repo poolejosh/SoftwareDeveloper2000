@@ -2,15 +2,15 @@ import pygame
 import os
 import random
 from common import logger
-from text_wrap import drawText
+from other.text_wrap import drawText
 
-from main_menu import MainMenu
-from hideout import Hideout
-from develop import Develop
-from popup import PopUp
-from feature_popup import FeaturePopUp
-from player import Player
-from virus_enemy import VirusEnemy
+from main_menu.main_menu import MainMenu
+from hideout.hideout import Hideout
+from develop.develop import Develop
+from other.popup import PopUp
+from hideout.feature_popup import FeaturePopUp
+from player.player import Player
+from enemies.virus_enemy import VirusEnemy
 
 WIDTH, HEIGHT = 512, 512
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -152,7 +152,7 @@ def main():
     clock = pygame.time.Clock()
     pygame.init()
     pygame.mixer.init()
-    pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 4.wav"))
+    pygame.mixer.music.load(os.path.join("assets", "music", "Ludum Dare 32 - Track 4.wav"))
     pygame.mixer.music.set_volume(0.01) # TODO: 0.1 when done
     pygame.mixer.music.play(-1)
     run = True
@@ -172,7 +172,7 @@ def main():
                         mouse_pos = pygame.mouse.get_pos()
                         if main_menu.buttons[0].mouse_on_button(mouse_pos) and not popup:
                             mode = HIDEOUT
-                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 3.wav"))
+                            pygame.mixer.music.load(os.path.join("assets", "music", "Ludum Dare 32 - Track 3.wav"))
                             pygame.mixer.music.play(-1)
 
                         elif main_menu.buttons[1].mouse_on_button(mouse_pos) and not popup:
@@ -194,7 +194,7 @@ def main():
                         mouse_pos = pygame.mouse.get_pos()
                         if hideout.buttons[0].mouse_on_button(mouse_pos) and not popup:
                             mode = DEVELOP
-                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 1.wav"))
+                            pygame.mixer.music.load(os.path.join("assets", "music", "Ludum Dare 32 - Track 1.wav"))
                             pygame.mixer.music.play(-1)
                             rand = random.randint(1, 5)
                             for i in range(rand):
@@ -215,11 +215,11 @@ def main():
 
                         elif hideout.buttons[2].mouse_on_button(mouse_pos) and not popup:
                             mode = MAIN_MENU
-                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 4.wav"))
+                            pygame.mixer.music.load(os.path.join("assets", "music", "Ludum Dare 32 - Track 4.wav"))
                             pygame.mixer.music.play(-1)
 
                         elif hideout.buttons[3].mouse_on_button(mouse_pos) and not popup:
-                            popup = PopUp(64, 64, "Active Exploits", "exploits.txt")
+                            popup = PopUp(64, 64, "Active Vulnerabilities", "exploits.txt")
                             for exploit in hideout.active_exploits:
                                 popup.body_text += exploit.name + "- user rate: {}, rep rate: {}".format(exploit.user_rate, exploit.rep_rate) +  ", "
 
@@ -299,7 +299,7 @@ def main():
                         if not player.inflict_damage(enemy.damage, tick):
                             enemies = []
                             mode = HIDEOUT
-                            pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 3.wav"))
+                            pygame.mixer.music.load(os.path.join("assets", "music", "Ludum Dare 32 - Track 3.wav"))
                             pygame.mixer.music.play(-1)
 
             develop.set_background(tick)
@@ -324,7 +324,7 @@ def main():
                     hideout.change_money(5)
 
                 mode = HIDEOUT
-                pygame.mixer.music.load(os.path.join("music", "Ludum Dare 32 - Track 3.wav"))
+                pygame.mixer.music.load(os.path.join("assets", "music", "Ludum Dare 32 - Track 3.wav"))
                 pygame.mixer.music.play(-1)
                 hideout.users += hideout.user_rate
                 hideout.reputation += hideout.rep_rate

@@ -1,7 +1,7 @@
 import os
 import random
 import pygame
-from enemy import Enemy
+from enemies.enemy import Enemy
 
 pygame.mixer.init()
 
@@ -12,7 +12,7 @@ VEL = 1
 
 class VirusEnemy(Enemy):
     VIRUS_WIDTH, VIRUS_HEIGHT = 48, 48
-    VIRUS_SPRITE_IMAGE = pygame.image.load(os.path.join("images", "sprites", "virus_sprite.png"))
+    VIRUS_SPRITE_IMAGE = pygame.image.load(os.path.join("assets", "images", "sprites", "virus_sprite.png"))
 
     def __init__(self, left, top, width=VIRUS_WIDTH, height=VIRUS_HEIGHT):
         Enemy.__init__(self, left, top, width, height)
@@ -22,7 +22,7 @@ class VirusEnemy(Enemy):
         self.hitbox = pygame.Rect(left, top, width, height)
         self.health = 10
         self.damage = 5
-        self.damaged_sound =  pygame.mixer.Sound(os.path.join("sounds", "Enemy_Damage.wav"))
+        self.damaged_sound =  pygame.mixer.Sound(os.path.join("assets", "sounds", "Enemy_Damage.wav"))
         self.damaged_sound.set_volume(0.1)
         self.i_frame = None
         self.invincible = False

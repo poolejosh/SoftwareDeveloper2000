@@ -4,19 +4,19 @@ import pygame
 class Develop(pygame.Rect):
     WIDTH, HEIGHT = 512, 512
     BACKGROUND_IMAGES = [
-    pygame.image.load(os.path.join("images", "matrix_background", "0.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "1.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "2.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "3.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "4.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "5.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "6.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "7.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "8.png")),
-    pygame.image.load(os.path.join("images", "matrix_background", "9.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "0.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "1.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "2.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "3.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "4.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "5.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "6.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "7.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "8.png")),
+    pygame.image.load(os.path.join("assets", "images", "matrix_background", "9.png")),
     ]
-    HEALTH_BAR_IMAGE = pygame.image.load(os.path.join("images", "ui", "health_bar.png"))
-    HEALTH_FILL_IMAGE = pygame.image.load(os.path.join("images", "ui", "health_fill.png"))
+    HEALTH_BAR_IMAGE = pygame.image.load(os.path.join("assets", "images", "ui", "health_bar.png"))
+    HEALTH_FILL_IMAGE = pygame.image.load(os.path.join("assets", "images", "ui", "health_fill.png"))
 
 
     def __init__(self, left, top, width=WIDTH, height=HEIGHT):

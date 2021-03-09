@@ -1,6 +1,6 @@
 import pygame
-from popup import PopUp
-from hideout_button import HideoutButton
+from other.popup import PopUp
+from hideout.hideout_button import HideoutButton
 
 BLACK = (0, 0, 0)
 

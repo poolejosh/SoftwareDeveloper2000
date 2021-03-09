@@ -1,7 +1,7 @@
 import os
 import pygame
-from directed_attack import DirectedAttack
-from aoe_attack import AoeAttack
+from player.directed_attack import DirectedAttack
+from player.aoe_attack import AoeAttack
 
 pygame.mixer.init()
 
@@ -10,8 +10,8 @@ WEST, EAST, NORTH, SOUTH, NW, NE, SW, SE = "WEST", "EAST", "NORTH", "SOUTH", "NW
 VEL = 3
 
 class Player(pygame.Rect):
-    SPRITE_IMATE_L = pygame.image.load(os.path.join("images", "sprites", "computer_sprite_l.png"))
-    SPRITE_IMAGE_R = pygame.image.load(os.path.join("images", "sprites", "computer_sprite_r.png"))
+    SPRITE_IMATE_L = pygame.image.load(os.path.join("assets", "images", "sprites", "computer_sprite_l.png"))
+    SPRITE_IMAGE_R = pygame.image.load(os.path.join("assets", "images", "sprites", "computer_sprite_r.png"))
 
     def __init__(self, left, top, width, height, facing_left):
         pygame.Rect.__init__(self, left, top, width, height)
@@ -22,17 +22,17 @@ class Player(pygame.Rect):
         self.health = 20
         self.invincible = False
         self.i_frame = None
-        self.damaged_sound =  pygame.mixer.Sound(os.path.join("sounds", "Hero_Hurt.wav"))
+        self.damaged_sound =  pygame.mixer.Sound(os.path.join("assets", "sounds", "Hero_Hurt.wav"))
         self.damaged_sound.set_volume(0.03)
 
         self.directed_attack = DirectedAttack(left, top)
         self.doing_directed_attack = False
-        self.directed_attack_sound = pygame.mixer.Sound(os.path.join("sounds", "Laser.wav"))
+        self.directed_attack_sound = pygame.mixer.Sound(os.path.join("assets", "sounds", "Laser.wav"))
         self.directed_attack_sound.set_volume(0.1)
 
         self.aoe_attack = AoeAttack(left - 32, top - 32)
         self.doing_aoe_attack = False
-        self.aoe_attack_sound = pygame.mixer.Sound(os.path.join("sounds", "Magic.wav"))
+        self.aoe_attack_sound = pygame.mixer.Sound(os.path.join("assets", "sounds", "Magic.wav"))
         self.aoe_attack_sound.set_volume(0.03)
 
     def handle_movement(self, keys_pressed):

@@ -1,15 +1,15 @@
 import os
 import pygame
-from attack import Attack
+from player.attack import Attack
 
 class DirectedAttack(Attack):
     DIRECTED_ATTACK_WIDTH, DIRECTED_ATTACK_HEIGHT = 64, 64
     DIRECTED_ATTACK_IMAGES = [
-        pygame.image.load(os.path.join("images", "fx", "directed_attack", "0.png")),
-        pygame.image.load(os.path.join("images", "fx", "directed_attack", "1.png")),
-        pygame.image.load(os.path.join("images", "fx", "directed_attack", "2.png")),
-        pygame.image.load(os.path.join("images", "fx", "directed_attack", "3.png")),
-        pygame.image.load(os.path.join("images", "fx", "directed_attack", "4.png")),
+        pygame.image.load(os.path.join("assets", "images", "fx", "directed_attack", "0.png")),
+        pygame.image.load(os.path.join("assets", "images", "fx", "directed_attack", "1.png")),
+        pygame.image.load(os.path.join("assets", "images", "fx", "directed_attack", "2.png")),
+        pygame.image.load(os.path.join("assets", "images", "fx", "directed_attack", "3.png")),
+        pygame.image.load(os.path.join("assets", "images", "fx", "directed_attack", "4.png")),
     ]
     DIRECTED_ATTACK = [
         pygame.transform.scale(DIRECTED_ATTACK_IMAGES[0], (DIRECTED_ATTACK_WIDTH, DIRECTED_ATTACK_HEIGHT)),

@@ -6,7 +6,7 @@ BLACK = (0, 0, 0)
 class Button(pygame.Rect):
     def __init__(self, left, top, label, font_size, width, height):
         pygame.Rect.__init__(self, left, top, width, height)
-        self.font = pygame.font.Font(os.path.join("fonts", "M_8pt.ttf"), font_size)
+        self.font = pygame.font.Font(os.path.join("assets", "fonts", "M_8pt.ttf"), font_size)
         self.label = self.font.render(label, False, BLACK)
 
     def mouse_on_button(self, mouse_pos):

@@ -1,4 +1,35 @@
-# Assets Used
+# Web Developer 2000
+
+My second attempt at a roguelike game, this time with a subject focused on software development and vulnerabilities. Unfinished, but a cool concept and progress. This was made as a project for my Security and Vulnerabiltiy Assessments class.
+
+## About Me
+
+- Josh Poole
+    - Senior studying Computer Science at University of Cincinnati
+    - [poolejd@mail.uc.edu](mailto:poolejd@mail.uc.edu)
+
+## How to run the game
+
+To get started, install python 3.7+ if not already installed. Then initialize a virtual python environment and activate it:
+
+```bash
+$ py -3 -m venv env
+$ env\scripts\activate
+```
+
+Next, install required dependencies:
+
+```bash
+$ pip install -r requirements.txt
+```
+
+Then simply run the game!
+
+```bash
+$ python main.py
+```
+
+## Assets Used
 
 - [UI](https://comp3interactive.itch.io/retro-windows-gui)
 - [Develop Background](https://www.pinterest.com/pin/509188301610937530/)

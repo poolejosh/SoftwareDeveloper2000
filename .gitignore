@@ -2,7 +2,5 @@
 .vscode/*
 env/
 env/*
-Assets/
-Assets/*
 __pycache__/
 __pycache__/*
