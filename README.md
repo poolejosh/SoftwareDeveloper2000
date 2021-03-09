@@ -13,7 +13,7 @@ My second attempt at a roguelike game, this time with a subject focused on softw
 To get started, install python 3.7+ if not already installed. Then initialize a virtual python environment and activate it:
 
 ```bash
-$ py -3 -m venv env
+$ py -3.7 -m venv env
 $ env\scripts\activate
 ```
 
