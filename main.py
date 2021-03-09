@@ -14,7 +14,7 @@ from virus_enemy import VirusEnemy
 
 WIDTH, HEIGHT = 512, 512
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Software Developer 2000")
+pygame.display.set_caption("Web Developer 2000")
 
 MAIN_MENU = "MAIN_MENU"
 HIDEOUT = "HIDEOUT"
