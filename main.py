@@ -181,7 +181,7 @@ def main():
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load(os.path.join("assets", "music", "Ludum Dare 32 - Track 4.wav"))
-    pygame.mixer.music.set_volume(0.01) # TODO: 0.1 when done
+    pygame.mixer.music.set_volume(0.05)
     pygame.mixer.music.play(-1)
     run = True
     tick = 0

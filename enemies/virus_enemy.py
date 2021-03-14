@@ -23,9 +23,9 @@ class VirusEnemy(Enemy):
         self.health = 10
         self.damage = 5
         self.damaged_sound = pygame.mixer.Sound(os.path.join("assets", "sounds", "Enemy_Damage.wav"))
-        self.damaged_sound.set_volume(0.1)
+        self.damaged_sound.set_volume(0.5)
         self.dies_sound = pygame.mixer.Sound(os.path.join("assets", "sounds", "Enemy_Dies.wav"))
-        self.dies_sound.set_volume(0.1)
+        self.dies_sound.set_volume(0.5)
         self.i_frame = None
         self.invincible = False
 

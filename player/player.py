@@ -23,17 +23,17 @@ class Player(pygame.Rect):
         self.invincible = False
         self.i_frame = None
         self.damaged_sound =  pygame.mixer.Sound(os.path.join("assets", "sounds", "Hero_Hurt.wav"))
-        self.damaged_sound.set_volume(0.03)
+        self.damaged_sound.set_volume(0.15)
 
         self.directed_attack = DirectedAttack(left, top)
         self.doing_directed_attack = False
         self.directed_attack_sound = pygame.mixer.Sound(os.path.join("assets", "sounds", "Laser.wav"))
-        self.directed_attack_sound.set_volume(0.1)
+        self.directed_attack_sound.set_volume(0.5)
 
         self.aoe_attack = AoeAttack(left - 32, top - 32)
         self.doing_aoe_attack = False
         self.aoe_attack_sound = pygame.mixer.Sound(os.path.join("assets", "sounds", "Magic.wav"))
-        self.aoe_attack_sound.set_volume(0.03)
+        self.aoe_attack_sound.set_volume(0.15)
 
     def handle_movement(self, keys_pressed):
         if keys_pressed[pygame.K_a] and self.x - VEL > 0: # LEFT
