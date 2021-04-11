@@ -1,8 +1,2 @@
-Welcome to Software Developer 2000!  
-- Get users and reputation to win.          
-- Gain more by adding features.            
-- Beware, the more features you add, the more exploits you can get.                  
-- Go develop to gain money for features.
-- Use WASD to move.                       
-- Click left mouse button to lauch a strong, directed attack.                      
-- Click right mouse button to lauch a weaker attack attack in all directions.
+Welcome to Vulnerability Finder!
+- Simply resolve the vulnerability in one of the python packages

@@ -14,7 +14,7 @@ class MainMenu(pygame.Rect):
         self.background = pygame.transform.scale(self.BACKGROUND_IMAGE, (width, height))
         self.background_inactive = pygame.transform.scale(self.BACKGROUND_IMAGE_INACTIVE, (width, height))
         self.header_font = pygame.font.Font(os.path.join("assets", "fonts", "M_8pt.ttf"), 20)
-        self.header = self.header_font.render("Web Developer 2000", False, WHITE)
+        self.header = self.header_font.render("Vulnerability Finder", False, WHITE)
         self.buttons = [
             MainMenuButton(81, 100, label="Start Game"),
             MainMenuButton(81, 300, label="How To Play")

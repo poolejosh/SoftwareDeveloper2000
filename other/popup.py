@@ -15,7 +15,7 @@ class PopUp(pygame.Rect):
         self.header_font = pygame.font.Font(os.path.join("assets", "fonts", "M_8pt.ttf"), 20)
         self.header = self.header_font.render(header_text, False, WHITE)
         
-        self.body_font = pygame.font.Font(os.path.join("assets", "fonts", "M_8pt.ttf"), 14)
+        self.body_font = pygame.font.Font(os.path.join("assets", "fonts", "M_8pt.ttf"), 18)
         with open(os.path.join("assets", "popup_info", body_file), "r") as f:
             self.body_text = f.read().replace("\n", " ")
         
